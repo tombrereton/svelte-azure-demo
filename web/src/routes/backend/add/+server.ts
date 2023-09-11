@@ -5,6 +5,9 @@ import { TEEITUP_TOPIC_ENDPOINT, TEEITUP_TOPIC_KEY } from '$env/static/private';
 
 
 async function SendEvent(): Promise<void> {
+}
+
+export const POST: RequestHandler = async ({ request }) => {
     const client = new EventGridPublisherClient(
         TEEITUP_TOPIC_ENDPOINT,
         "CloudEvent",
@@ -19,12 +22,6 @@ async function SendEvent(): Promise<void> {
             }
         }
     ]);
-}
-
-export const POST: RequestHandler = async ({ request }) => {
-    SendEvent().catch((err)=> {
-        console.error("Event sending error:", err)
-    })
     console.log("After event sent")
     const { a, b } = await request.json();
     return json(a + b);
