@@ -8,6 +8,8 @@ async function SendEvent(): Promise<void> {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
+    const { a, b } = await request.json();
+    let sum = a + b;
     const client = new EventGridPublisherClient(
         TEEITUP_TOPIC_ENDPOINT,
         "CloudEvent",
@@ -18,11 +20,10 @@ export const POST: RequestHandler = async ({ request }) => {
             type: "azure.sdk.eventgrid.samples.cloudevent",
             source: "/azure/sdk/eventgrid/samples/sendEventSample",
             data: {
-                message: "this is a sample event"
+                message: `this is a sample event: ${sum}`
             }
         }
     ]);
     console.log("After event sent")
-    const { a, b } = await request.json();
-    return json(a + b);
+    return json(sum);
 };
